@@ -1,0 +1,50 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: certmanager
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - clusterName: local-dev
+        clusterURL: https://kubernetes.default.svc
+        variant: local
+        chartVersion: 1.16.1
+  template:
+    metadata:
+      name: '{{.clusterName}}-cert-manager'
+    spec:
+      destination:
+        server: '{{.clusterURL}}'
+        namespace: certmanager
+      project: default
+      sources:
+      - repoURL: https://charts.jetstack.io
+        targetRevision: "{{.chartVersion}}"
+        chart: cert-manager
+        helm:
+          valueFiles:
+            - $values/apps-config/base/cert-manager.yaml
+            - $values/apps-config/variant/{{.variant}}/cert-manager.yaml
+            - $values/apps-config/environment/{{.clusterName}}/cert-manager.yaml
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        ref: values
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        path: apps-config/environment/{{.clusterName}}/manifests/cert-manager
+      ignoreDifferences:
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          name: cert-manager-webhook
+          jqPathExpressions:
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "control-plane")
+            - .webhooks[].namespaceSelector.matchExpressions[] | select(.key == "kubernetes.azure.com/managedby")
+      syncPolicy:
+        # automated:
+        #   prune: true
+        #   selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

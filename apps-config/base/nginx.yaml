@@ -1,0 +1,31 @@
+controller:
+  kind: Deployment
+
+  hostPort:
+    enabled: false
+    http: null
+    https: null
+
+  service:
+    type: LoadBalancer
+    nodePorts:
+      http: null
+      https: null
+
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: false
+    controllerValue: "k8s.io/nginx"
+
+  ingressClass: nginx
+  ingressClassByName: true
+  watchIngressWithoutClass: false
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

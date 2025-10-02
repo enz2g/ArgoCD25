@@ -1,0 +1,3 @@
+parameters:
+  - name: "grafana.image.tag"
+    value: "11.6.0"  # example override if needed

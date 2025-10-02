@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: sample-guestbook
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+        - clusterName: local-dev
+          clusterURL: https://kubernetes.default.svc
+          variant: local
+  template:
+    metadata:
+      name: '{{.clusterName}}-sample-guestbook'
+    spec:
+      destination:
+        server: '{{.clusterURL}}'
+        namespace: sample-guestbook
+      project: sample-guestbook
+      sources:
+      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
+        targetRevision: HEAD
+        path: apps-config/environment/{{.clusterName}}/manifests/sample-guestbook
+      syncPolicy:
+        # automated:
+        #   prune: true
+        #   selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

@@ -1,0 +1,4 @@
+global:
+  prometheus:
+    enabled: true
+    port: 9090

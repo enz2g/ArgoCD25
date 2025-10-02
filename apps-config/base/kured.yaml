@@ -1,0 +1,6 @@
+updateStrategy: RollingUpdate
+configuration:
+  period: "1h0m0s"
+  rebootDays: [mo, tu, we, th, fr]
+  timeZone: "Australia/Sydney"
+  rebootCommand: "reboot"

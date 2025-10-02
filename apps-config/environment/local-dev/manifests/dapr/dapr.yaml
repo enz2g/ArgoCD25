@@ -1,0 +1,10 @@
+dapr_dashboard:
+    logLevel: debug
+dapr_operator:
+  logLevel: debug
+dapr_placement:
+  logLevel: debug
+dapr_sentry:
+  logLevel: debug
+dapr_sidecar_injector:
+  logLevel: debug

@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: nginx-ingress
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - clusterName: local-dev
+        clusterURL: https://kubernetes.default.svc
+        variant: local
+        chartVersion: v4.10.0
+  template:
+    metadata:
+      name: '{{.clusterName}}-nginx'
+    spec:
+      destination:
+        server: '{{.clusterURL}}'
+        namespace: nginx
+      project: platform
+      sources:
+      - repoURL: https://kubernetes.github.io/ingress-nginx
+        chart: ingress-nginx
+        targetRevision: "{{.chartVersion}}"   # Choose a version compatible with your k8s cluster
+        helm:
+          valueFiles:
+                - $values/apps-config/base/nginx.yaml
+                - $values/apps-config/variant/{{.variant}}/nginx.yaml
+                - $values/apps-config/environment/{{.clusterName}}/nginx.yaml  
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        ref: values   
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

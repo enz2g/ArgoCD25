@@ -1,0 +1,42 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - clusterName: local-dev
+        clusterURL: https://kubernetes.default.svc
+        variant: local
+        chartVersion: v4.10.0
+  template:
+    metadata:
+      name: '{{.clusterName}}-argocd'
+    spec:
+      destination:
+        server: '{{.clusterURL}}'
+        namespace: argocd
+      project: platform
+      sources:
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        ref: values   
+        helm:
+          valueFiles:
+                - $values/apps-config/base/argocd.yaml
+                - $values/apps-config/variant/{{.variant}}/argocd.yaml
+                - $values/apps-config/environment/{{.clusterName}}/argocd.yaml  
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        path: apps-config/environment/{{.clusterName}}/manifests/argocd
+
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

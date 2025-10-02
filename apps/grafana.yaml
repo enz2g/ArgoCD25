@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: grafana
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - list:
+      elements:
+      - clusterName: local-dev
+        clusterURL: https://kubernetes.default.svc
+        variant: local
+        chartVersion: 9.4.4
+  template:
+    metadata:
+      name: '{{.clusterName}}-grafana'
+    spec:
+      project: default
+      sources:
+      - repoURL: https://grafana.github.io/helm-charts
+        targetRevision: "{{.chartVersion}}"
+        chart: grafana
+        helm:
+          valueFiles:
+            - $values/apps-config/base/grafana.yaml
+            - $values/apps-config/variant/{{.variant}}/grafana.yaml
+            - $values/apps-config/environment/{{.clusterName}}/grafana.yaml
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        ref: values
+      - repoURL: https://github.com/enz2g/ArgoCD
+        targetRevision: HEAD
+        path: apps-config/environment/{{.clusterName}}/manifests/grafana
+      destination:
+        server: '{{.clusterURL}}'
+        namespace: grafana
+      syncPolicy:
+        # automated:
+        #   prune: true
+        #   selfHeal: true
+        syncOptions:
+        - CreateNamespace=true
