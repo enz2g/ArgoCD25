@@ -16,7 +16,7 @@ spec:
     metadata:
       name: '{{.clusterName}}-grafana'
     spec:
-      project: default
+      project: platform
       sources:
       - repoURL: https://grafana.github.io/helm-charts
         targetRevision: "{{.chartVersion}}"

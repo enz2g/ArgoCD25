@@ -16,7 +16,7 @@ spec:
     metadata:
       name: '{{.clusterName}}-confluence'
     spec:
-      project: default
+      project: platform
       sources:
       - repoURL: https://atlassian.github.io/data-center-helm-charts
         targetRevision: "{{.chartVersion}}"

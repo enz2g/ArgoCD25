@@ -19,7 +19,7 @@ spec:
       destination:
         server: '{{.clusterURL}}'
         namespace: certmanager
-      project: default
+      project: platform
       sources:
       - repoURL: https://charts.jetstack.io
         targetRevision: "{{.chartVersion}}"
