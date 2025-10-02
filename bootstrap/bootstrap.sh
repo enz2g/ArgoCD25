@@ -37,7 +37,7 @@ fi
 # Check if the Argo CD deployment exists
 if ! kubectl get deployment "${DEPLOYMENT_NAME}" -n "${NAMESPACE}" &> /dev/null; then
   echo "Argo CD is not installed. Installing it now..."
-  kubectl apply -n "${NAMESPACE}" -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 else
   echo "Argo CD is already installed in the '${NAMESPACE}' namespace."
 fi
