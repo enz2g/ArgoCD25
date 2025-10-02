@@ -12,6 +12,7 @@ spec:
         - clusterName: local-dev
           clusterURL: https://kubernetes.default.svc
           variant: local
+          chartVersion: "v0.1.9"
   template:
     metadata:
       name: '{{.clusterName}}-sample-guestbook'
@@ -21,9 +22,17 @@ spec:
         namespace: sample-guestbook
       project: platform
       sources:
-      - repoURL: https://github.com/enz2g/ArgoCD
+      - repoURL: https://blackopssolutions.github.io/blackops-guestbook
+        chart: guestbook
+        targetRevision: "{{.chartVersion}}"
+        helm:
+        valueFiles:
+          - $values/apps-config/base/guestbook.yaml
+          - $values/apps-config/variant/{{.variant}}/guestbook.yaml
+          - $values/apps-config/environment/{{.clusterName}}/guestbook.yaml
+      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
         targetRevision: HEAD
-        path: apps-config/environment/{{.clusterName}}/manifests/sample-guestbook
+        ref: values
       syncPolicy:
         # automated:
         #   prune: true

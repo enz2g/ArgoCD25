@@ -29,10 +29,10 @@ spec:
             - $values/apps-config/base/cert-manager.yaml
             - $values/apps-config/variant/{{.variant}}/cert-manager.yaml
             - $values/apps-config/environment/{{.clusterName}}/cert-manager.yaml
-      - repoURL: https://github.com/enz2g/ArgoCD
+      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
         targetRevision: HEAD
         ref: values
-      - repoURL: https://github.com/enz2g/ArgoCD
+      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
         targetRevision: HEAD
         path: apps-config/environment/{{.clusterName}}/manifests/cert-manager
       ignoreDifferences:

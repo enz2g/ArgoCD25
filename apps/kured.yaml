@@ -1,42 +1,42 @@
-# apiVersion: argoproj.io/v1alpha1
-# kind: ApplicationSet
-# metadata:
-#   name: kured
-#   namespace: argocd
-# spec:
-#   goTemplate: true
-#   goTemplateOptions: ["missingkey=error"]
-#   generators:
-#     - list:
-#         elements:
-#         - clusterName: local-dev
-#           clusterURL: https://kubernetes.default.svc
-#           variant: local
-#           chartVersion: 5.6.1
-#   template:
-#     metadata:
-#       name: "{{.clusterName}}-kured"
-#     spec:
-#       destination:
-#         server: "{{.clusterURL}}"
-#         namespace: kured-ns
-#       project: platform
-#       sources:
-#         - repoURL: https://kubereboot.github.io/charts
-#           chart: kured
-#           targetRevision: "{{.chartVersion}}"
-#           helm:
-#             releaseName: kured
-#             valueFiles:
-#               - $values/apps-config/base/kured.yaml
-#               - $values/apps-config/variant/{{.variant}}/kured.yaml
-#               - $values/apps-config/environment/{{.clusterName}}/kured.yaml
-#         - repoURL: https://EDG-Technology@dev.azure.com/EDG-Technology/Platform%20Engineering/_git/edx-platform-gitops
-#           targetRevision: HEAD
-#           ref: values
-#       syncPolicy:
-#         # automated:
-#         #   prune: true
-#         #   selfHeal: true
-#         syncOptions:
-#           - CreateNamespace=true
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kured
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - list:
+        elements:
+        - clusterName: local-dev
+          clusterURL: https://kubernetes.default.svc
+          variant: local
+          chartVersion: 5.6.1
+  template:
+    metadata:
+      name: "{{.clusterName}}-kured"
+    spec:
+      destination:
+        server: "{{.clusterURL}}"
+        namespace: kured-ns
+      project: platform
+      sources:
+        - repoURL: https://kubereboot.github.io/charts
+          chart: kured
+          targetRevision: "{{.chartVersion}}"
+          helm:
+            releaseName: kured
+            valueFiles:
+              - $values/apps-config/base/kured.yaml
+              - $values/apps-config/variant/{{.variant}}/kured.yaml
+              - $values/apps-config/environment/{{.clusterName}}/kured.yaml
+        - repoURL: https://EDG-Technology@dev.azure.com/EDG-Technology/Platform%20Engineering/_git/edx-platform-gitops
+          targetRevision: HEAD
+          ref: values
+      syncPolicy:
+        # automated:
+        #   prune: true
+        #   selfHeal: true
+        syncOptions:
+          - CreateNamespace=true

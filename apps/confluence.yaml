@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: grafana
+  name: confluence
 spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
@@ -11,30 +11,30 @@ spec:
       - clusterName: local-dev
         clusterURL: https://kubernetes.default.svc
         variant: local
-        chartVersion: 9.4.4
+        chartVersion: 2.0.4
   template:
     metadata:
-      name: '{{.clusterName}}-grafana'
+      name: '{{.clusterName}}-confluence'
     spec:
       project: default
       sources:
-      - repoURL: https://grafana.github.io/helm-charts
+      - repoURL: https://atlassian.github.io/data-center-helm-charts
         targetRevision: "{{.chartVersion}}"
-        chart: grafana
+        chart: confluence
         helm:
           valueFiles:
-            - $values/apps-config/base/grafana.yaml
-            - $values/apps-config/variant/{{.variant}}/grafana.yaml
-            - $values/apps-config/environment/{{.clusterName}}/grafana.yaml
+            - $values/apps-config/base/confluence.yaml
+            - $values/apps-config/variant/{{.variant}}/confluence.yaml
+            - $values/apps-config/environment/{{.clusterName}}/confluence.yaml
       - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
         targetRevision: HEAD
         ref: values
       - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
         targetRevision: HEAD
-        path: apps-config/environment/{{.clusterName}}/manifests/grafana
+        path: apps-config/environment/{{.clusterName}}/manifests/confluence
       destination:
         server: '{{.clusterURL}}'
-        namespace: grafana
+        namespace: confluence
       syncPolicy:
         # automated:
         #   prune: true

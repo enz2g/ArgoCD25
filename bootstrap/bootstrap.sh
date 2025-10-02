@@ -53,7 +53,7 @@ else
 fi
 
 echo "🌐 Applying ArgoCD Ingress for Traefik (${argocdServerURL})..."
-kubectl apply -f argocd-cmd-params-cm.yaml
+kubectl apply -f argocd-cmd-params-cm.yaml -n argocd
 
 # Generate self-signed TLS cert if not exists
 if [[ ! -f "argocd.crt" || ! -f "argocd.key" ]]; then
@@ -79,7 +79,7 @@ kubectl -n argocd rollout status deployment argocd-server
 # Server Ingress so we're reachable
 if ! kubectl get ingress "argocd-server-ingress" -n "${NAMESPACE}" &> /dev/null; then
     echo "Argo CD ingress is not deployed. Deploying it now..."
-    kubectl apply -n "${NAMESPACE}" -f argocd-ingress.yaml
+    kubectl apply -n argocd -f argocd-ingress.yaml
   else
     echo "Argo CD Ingress is already Deployed in the '${NAMESPACE}' namespace. Continuing..."
 fi

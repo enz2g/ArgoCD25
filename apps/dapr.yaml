@@ -16,6 +16,8 @@ spec:
   template:
     metadata:
       name: "{{.clusterName}}-dapr"
+      annotations:
+      argocd.argoproj.io/sync-wave: "1"
     spec:
       destination:
         server: "{{.clusterURL}}"
@@ -31,7 +33,7 @@ spec:
               - $values/apps-config/base/dapr.yaml
               - $values/apps-config/variant/{{.variant}}/dapr.yaml
               - $values/apps-config/environment/{{.clusterName}}/dapr.yaml
-        - repoURL: https://github.com/enz2g/ArgoCD
+        - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
           targetRevision: HEAD
           ref: values
       ignoreDifferences:
