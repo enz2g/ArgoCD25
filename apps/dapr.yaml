@@ -33,7 +33,7 @@ spec:
               - $values/apps-config/base/dapr.yaml
               - $values/apps-config/variant/{{.variant}}/dapr.yaml
               - $values/apps-config/environment/{{.clusterName}}/dapr.yaml
-        - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
+        - repoURL: https://github.com/enz2g/ArgoCD25
           targetRevision: HEAD
           ref: values
       ignoreDifferences:

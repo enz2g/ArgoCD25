@@ -22,7 +22,7 @@ spec:
         namespace: argocd
       project: platform
       sources:
-      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
+      - repoURL: https://github.com/enz2g/ArgoCD25
         targetRevision: HEAD
         path: apps-config/environment/{{.clusterName}}/manifests/argocd
 

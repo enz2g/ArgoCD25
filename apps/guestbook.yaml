@@ -30,7 +30,7 @@ spec:
           - $values/apps-config/base/guestbook.yaml
           - $values/apps-config/variant/{{.variant}}/guestbook.yaml
           - $values/apps-config/environment/{{.clusterName}}/guestbook.yaml
-      - repoURL: https://github.com/BlackOpsSolutions/Training-ArgoCD.git
+      - repoURL: https://github.com/enz2g/ArgoCD25
         targetRevision: HEAD
         ref: values
       syncPolicy:

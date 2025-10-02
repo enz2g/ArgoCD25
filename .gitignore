@@ -26,3 +26,5 @@ go.work.sum
 bootstrap/argocd.crt
 bootstrap/argocd.key
 bootstrap/processed-devops-repo-PAT.yaml
+*.crt
+*.key
