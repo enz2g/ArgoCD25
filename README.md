@@ -48,8 +48,8 @@ bootstrap/
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/BlackOpsSolutions/Training-ArgoCD.git
-   cd Training-ArgoCD/bootstrap
+   git clone https://github.com/enz2g/ArgoCD25
+   cd ArgoCD25/bootstrap
    ```
 #### <span style="color: red;"> 📛 BOOTSTRAP Script is for Mac/Linux Machines to run shell. A Powershell script will be available to do Windows</span>
 
