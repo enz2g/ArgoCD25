@@ -75,18 +75,18 @@ kubectl -n argocd rollout restart deployment argocd-server
 # Wait for rollout to complete
 kubectl -n argocd rollout status deployment argocd-server
 
-
-# Server Ingress so we're reachable
-if ! kubectl get ingress "argocd-server-ingress" -n "${NAMESPACE}" &> /dev/null; then
-    echo "Argo CD ingress is not deployed. Deploying it now..."
-    kubectl apply -n argocd -f argocd-ingress.yaml
-  else
-    echo "Argo CD Ingress is already Deployed in the '${NAMESPACE}' namespace. Continuing..."
-fi
+#### COMMENTED OUT AS WE HANDLE INGRESS VIA ARGOCD ITSELF
+# # Server Ingress so we're reachable
+# if ! kubectl get ingress "argocd-server-ingress" -n "${NAMESPACE}" &> /dev/null; then
+#     echo "Argo CD ingress is not deployed. Deploying it now..."
+#     kubectl apply -n argocd -f argocd-ingress.yaml
+#   else
+#     echo "Argo CD Ingress is already Deployed in the '${NAMESPACE}' namespace. Continuing..."
+# fi
 
 
 #git Repo Connector
-if ! kubectl get secret "edx-platform-gitops-repo" -n "${NAMESPACE}" &> /dev/null; then
+if ! kubectl get secret "githubrepo" -n "${NAMESPACE}" &> /dev/null; then
     echo "🧩 Registering Git Connector..."
     echo "..."
   if  "$CURRENT_CONTEXT" !=  "rancher-desktop" ; then
@@ -108,22 +108,5 @@ kubectl apply -f ../apps/app-of-apps.yaml
 echo "🚀 Setup complete. Access ArgoCD at: https://argocd.local"
 
 
-# Ask the user if they want to set the ArgoCD admin password
-updateArgoAdminPW=true
-read -p "Do you want to set the ArgoCD admin password? (yes/no): " response
-if [[ "$response" == "yes" || "$response" == "y" ]]; then
-# moving off cmdline to pipline switch this out of the prompt
   ArgoPW=$(argocd admin initial-password -n argocd | head -n 1)
-  # Prompt the user for their ADO PAT (hidden input for security)
-  read -s -p "Enter your preferred admin PW"
-  echo
-  export $ArgoMainPW
-  argocd login argocd.local --insecure --username admin --password $ArgoPW --grpc-web
-  argocd account update-password --account admin --current-password $ArgoPW --new-password $ArgoMainPW --insecure --grpc-web --server $argocdServerURL
-  # Testing SWAP BACK
-  #  argocd account update-password --account admin --current-password $ArgoMainPW --new-password $ArgoPW --insecure --grpc-web --server $argocdServerURL
-
-  echo "✅ ArgoCD admin password has been updated."
-else
-  echo "❌ Skipping ArgoCD admin password setup. if DEFAULT Password still active, Please change it!"
-fi
+echo "$ArgoPW"
