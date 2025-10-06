@@ -12,7 +12,7 @@ spec:
         - clusterName: local-dev
           clusterURL: https://kubernetes.default.svc
           variant: local
-          chartVersion: "v0.1.21"
+          chartVersion: "v0.1.26"
   template:
     metadata:
       name: '{{.clusterName}}-bradsapp'
@@ -26,10 +26,10 @@ spec:
         chart: webapp
         targetRevision: "{{.chartVersion}}"
         helm:
-        valueFiles:
-          - $values/apps-config/base/bradsapp.yaml
-          - $values/apps-config/variant/{{.variant}}/bradsapp.yaml
-          - $values/apps-config/environment/{{.clusterName}}/bradsapp.yaml
+          valueFiles:
+            - $values/apps-config/base/bradsapp.yaml
+            - $values/apps-config/variant/{{.variant}}/bradsapp.yaml
+            - $values/apps-config/environment/{{.clusterName}}/bradsapp.yaml
       - repoURL: https://github.com/enz2g/ArgoCD25
         targetRevision: HEAD
         ref: values
