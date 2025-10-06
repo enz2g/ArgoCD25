@@ -1,2 +1,4 @@
 config: 
-  appVersion: "anytext"
+  appVersion: "v0.1.0"
+image: 
+  tag: "f0865d4bda4b8f93574e3a4e9dcfda392f0c886d"
