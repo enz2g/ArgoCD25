@@ -33,6 +33,9 @@ spec:
       - repoURL: https://github.com/enz2g/ArgoCD25
         targetRevision: HEAD
         ref: values
+      - repoURL: https://github.com/enz2g/ArgoCD25
+        targetRevision: HEAD
+        path: apps-config/environment/{{.clusterName}}/manifests/bradsapp
       syncPolicy:
         # automated:
         #   prune: true

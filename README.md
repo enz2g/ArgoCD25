@@ -47,4 +47,12 @@ Each app has its own `values-dev.yaml` and `values-prod.yaml` in the root of its
 
 ---
 
-
+## Manual Self Sign Certificates
+Because it is a local environment we need to create self signed certificates, below is to create Brads App self signed certificates with Bash.
+```
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout bradsapp.key -out bradsapp.crt -subj /"/CN=bradsapp.local/O=bradsapp.local/"
+```
+Apply certificate files to webapp tls certificate secret 
+```
+kubectl create secret tls webapp-tls --cert=bradsapp.crt --key=bradsapp.key -n bradsapp
+```
